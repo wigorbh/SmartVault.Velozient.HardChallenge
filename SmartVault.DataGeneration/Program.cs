@@ -63,6 +63,7 @@ namespace SmartVault.DataGeneration
         private static void PrintDatabaseStatistics(SQLiteConnection connection)
         {
             var accountCount = connection.QuerySingle<int>("SELECT COUNT(*) FROM Account;");
+
             Console.WriteLine($"Number of Accounts: {accountCount}");
 
             var documentCount = connection.QuerySingle<int>("SELECT COUNT(*) FROM Document;");
@@ -86,11 +87,9 @@ namespace SmartVault.DataGeneration
 
             var documentNumber = 0;
             var randomDayIterator = RandomDay().GetEnumerator();
-
             var userInserts = new List<User>();
             var accountInserts = new List<Account>();
             var documentInserts = new List<Document>();
-
 
             for (int i = 0; i < numUsers; i++)
             {
@@ -103,11 +102,11 @@ namespace SmartVault.DataGeneration
                     Id = i,
                     FirstName = $"FirstName-{i}",
                     LastName = $"LastName-{i}",
-                    DateOfBirth = randomDayIterator.Current,
+                    DateOfBirth = randomDayIterator.Current.ToString("yyyy-MM-dd"),
                     AccountId = i,
                     Username = $"UserName-{i}",
                     Password = "e10adc3949ba59abbe56e057f20f883e",
-                    CreatedOn = createdOn // Set the created on date
+                    CreatedOn = createdOn
                 };
                 userInserts.Add(user);
 
@@ -116,18 +115,17 @@ namespace SmartVault.DataGeneration
                 {
                     Id = i,
                     Name = $"Account-{i}",
-                    CreatedOn = createdOn // Set the created on date
+                    CreatedOn = createdOn
                 };
                 accountInserts.Add(account);
 
-                var documentPath = new FileInfo("TestDoc.txt").FullName;
-
                 // Create Document objects
-                for (int d = 0; d < numDocumentsPerUser; d++, documentNumber++)
+                var documentPath = new FileInfo("TestDoc.txt").FullName;
+                for (int d = 0; d < numDocumentsPerUser; d++)
                 {
                     var document = new Document
                     {
-                        Id = documentNumber,
+                        Id = documentInserts.Count + 1, // Ensure unique Ids
                         Name = $"Document{i}-{d}.txt",
                         FilePath = documentPath,
                         Length = new FileInfo(documentPath).Length,
@@ -138,10 +136,11 @@ namespace SmartVault.DataGeneration
                 }
             }
 
-            connection.Execute("INSERT INTO User (Id, FirstName, LastName, DateOfBirth, AccountId, Username, Password) VALUES (@Id, @FirstName, @LastName, @DateOfBirth, @AccountId, @Username, @Password)", userInserts, transaction);
-            connection.Execute("INSERT INTO Account (Id, Name) VALUES (@Id, @Name)", accountInserts, transaction);
-            connection.Execute("INSERT INTO Document (Id, Name, FilePath, Length, AccountId) VALUES (@Id, @Name, @FilePath, @Length, @AccountId)", documentInserts, transaction);
-
+            // Execute SQL INSERT commands
+            connection.Execute("INSERT INTO User (Id, FirstName, LastName, DateOfBirth, AccountId, Username, Password, CreatedOn) VALUES (@Id, @FirstName, @LastName, @DateOfBirth, @AccountId, @Username, @Password, @CreatedOn)", userInserts, transaction);
+            connection.Execute("INSERT INTO Account (Id, Name, CreatedOn) VALUES (@Id, @Name, @CreatedOn)", accountInserts, transaction);
+            connection.Execute("INSERT INTO Document (Id, Name, FilePath, Length, AccountId, CreatedOn) VALUES (@Id, @Name, @FilePath, @Length, @AccountId, @CreatedOn)", documentInserts, transaction);
+ 
             transaction.Commit();
         }
 
