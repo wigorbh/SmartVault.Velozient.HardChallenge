@@ -23,9 +23,10 @@ namespace SmartVault.DataGeneration
             GenerateTestDocument();
 
             var connection = new SQLiteConnection(configuration["ConnectionStrings:DefaultConnection"]);
+
             LoadBusinessObjectDefinitions(connection);
             PopulateTestData(connection);
-            PrintDatabaseStatistics(connection);
+            PrintDatabaseStatistics(connection);            
         }
 
         private static void GenerateTestDocument()
@@ -121,11 +122,11 @@ namespace SmartVault.DataGeneration
 
                 // Create Document objects
                 var documentPath = new FileInfo("TestDoc.txt").FullName;
-                for (int d = 0; d < numDocumentsPerUser; d++)
+                for (int d = 0; d < numDocumentsPerUser; d++, documentNumber ++)
                 {
                     var document = new Document
                     {
-                        Id = documentInserts.Count + 1, // Ensure unique Ids
+                        Id = documentNumber,
                         Name = $"Document{i}-{d}.txt",
                         FilePath = documentPath,
                         Length = new FileInfo(documentPath).Length,
