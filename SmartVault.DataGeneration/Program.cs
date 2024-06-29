@@ -11,7 +11,7 @@ using SmartVault.Program.BusinessObjects;
 
 namespace SmartVault.DataGeneration
 {
-    partial class Program
+    public partial class Program
     {
         static void Main(string[] args)
         {
@@ -29,7 +29,7 @@ namespace SmartVault.DataGeneration
             PrintDatabaseStatistics(connection);            
         }
 
-        private static void GenerateTestDocument()
+        public static void GenerateTestDocument()
         {
             int repeatCount = 100;
             string documentContent = $"This is my test document {Environment.NewLine}";
@@ -44,8 +44,7 @@ namespace SmartVault.DataGeneration
             File.WriteAllText("TestDoc.txt", fullContent.ToString());
         }
 
-
-        static void LoadBusinessObjectDefinitions(SQLiteConnection connection)
+        private static void LoadBusinessObjectDefinitions(SQLiteConnection connection)
         {
             var businessObjectSchemaPath = @"..\..\..\..\BusinessObjectSchema";
             var xmlFiles = Directory.GetFiles(businessObjectSchemaPath);
@@ -60,8 +59,7 @@ namespace SmartVault.DataGeneration
             }
         }
 
-
-        private static void PrintDatabaseStatistics(SQLiteConnection connection)
+        public static void PrintDatabaseStatistics(SQLiteConnection connection)
         {
             var accountCount = connection.QuerySingle<int>("SELECT COUNT(*) FROM Account;");
 
@@ -74,8 +72,7 @@ namespace SmartVault.DataGeneration
             Console.WriteLine($"Number of Users: {userCount}");
         }
 
-
-        static void PopulateTestData(SQLiteConnection connection)
+        private static void PopulateTestData(SQLiteConnection connection)
         {
             connection.Open();
             connection.Execute("PRAGMA synchronous = OFF");

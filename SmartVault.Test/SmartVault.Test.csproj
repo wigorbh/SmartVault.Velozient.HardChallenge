@@ -18,6 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SmartVault.DataGeneration\SmartVault.DataGeneration.csproj" />
+  </ItemGroup>
+	
+  <ItemGroup>
     <Using Include="NUnit.Framework" />
   </ItemGroup>
 
