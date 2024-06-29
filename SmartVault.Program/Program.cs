@@ -3,11 +3,10 @@ using System;
 using SmartVault.Program.BusinessObjects;
 using System.Linq;
 using System.Collections.Generic;
-using System.Drawing;
 
 namespace SmartVault.Program
 {
-    partial class Program
+    public partial class Program
     {
         static void Main(string[] args)
         {
@@ -19,7 +18,7 @@ namespace SmartVault.Program
             WriteEveryThirdFileToFile(args[0]);
             GetAllFileSizes();
         }
-        private static void GetAllFileSizes()
+        public static void GetAllFileSizes()
         {
             // pass the directory to get the files
             var directoryPath = "";
@@ -51,7 +50,7 @@ namespace SmartVault.Program
         }
 
 
-        private static void WriteEveryThirdFileToFile(string accountId)
+        public static void WriteEveryThirdFileToFile(string accountId)
         {
             string outputDirectory = Directory.GetCurrentDirectory();
             string outputFileName = "OutputFile.txt";
