@@ -1,3 +1,9 @@
+## Next Step
+
+  - Clarify doubts about file recovery methods.
+  - Write unit tests for this service.
+  - Implement OAuth.
+
 # Overview
 
 The point of this brief exercise is to help us better understand your ability to work through problems, design solutions, and work in an existing codebase. It's important that the solution you provide meets all the requirements, demonstrates clean code, and is scalable.
